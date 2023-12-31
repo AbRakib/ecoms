@@ -27,4 +27,17 @@ class CartController extends Controller {
         Cart::instance('cart')->update($request->rowId, $request->quantity);
         return redirect()->route('cart.index');
     }
+
+    // remove item cart
+    public function removeItem(Request $request) {
+        $rowId = $request->rowId;
+        Cart::instance('cart')->remove($rowId);
+        return redirect()->route('cart.index');
+    }
+
+    // clear cart
+    public function clearCart() {
+        Cart::instance('cart')->destroy();
+        return redirect()->route('cart.index');
+    }
 }
