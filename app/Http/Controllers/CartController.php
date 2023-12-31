@@ -21,4 +21,10 @@ class CartController extends Controller {
         Cart::instance('cart')->add($product->id, $product->name, $request->quantity, $price)->associate('App\Models\Product');
         return redirect()->back()->with('message', 'Success | Item has been added successfully');
     }
+
+    // update cart
+    public function updateCart(Request $request) {
+        Cart::instance('cart')->update($request->rowId, $request->quantity);
+        return redirect()->route('cart.index');
+    }
 }
