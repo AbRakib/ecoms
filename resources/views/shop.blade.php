@@ -52,96 +52,25 @@
                                 data-bs-parent="#accordionExample">
                                 <div class="accordion-body category-scroll">
                                     <ul class="category-list">
-
+                                        @foreach ($brands as $brand)
                                         <li>
                                             <div class="form-check ps-0 custome-form-check">
-                                                <input class="checkbox_animated check-it" id="br1" name="brands"
-                                                    value="1" type="checkbox">
-                                                <label class="form-check-label">Quis Et</label>
-                                                <p class="font-light">(1)</p>
+                                                <input 
+                                                class="checkbox_animated check-it" 
+                                                id="br{{$brand->id}}" 
+                                                name="brands" 
+                                                value="{{ $brand->id }}" 
+                                                type="checkbox" 
+                                                @if (in_array($brand->id, explode(',', $q_brands)))
+                                                    checked="checked"
+                                                @endif
+                                                onchange="filterProductByBrands(this)"
+                                                />
+                                                <label class="form-check-label">{{ $brand->name }}</label>
+                                                <p class="font-light">({{ $brand->products->count() }})</p>
                                             </div>
                                         </li>
-
-                                        <li>
-                                            <div class="form-check ps-0 custome-form-check">
-                                                <input class="checkbox_animated check-it" id="br2" name="brands"
-                                                    value="2" type="checkbox">
-                                                <label class="form-check-label">Aliquam Doloremque</label>
-                                                <p class="font-light">(0)</p>
-                                            </div>
-                                        </li>
-
-                                        <li>
-                                            <div class="form-check ps-0 custome-form-check">
-                                                <input class="checkbox_animated check-it" id="br3" name="brands"
-                                                    value="3" type="checkbox">
-                                                <label class="form-check-label">Sequi Repellendus</label>
-                                                <p class="font-light">(1)</p>
-                                            </div>
-                                        </li>
-
-                                        <li>
-                                            <div class="form-check ps-0 custome-form-check">
-                                                <input class="checkbox_animated check-it" id="br4" name="brands"
-                                                    value="4" type="checkbox">
-                                                <label class="form-check-label">Repellendus Quia</label>
-                                                <p class="font-light">(2)</p>
-                                            </div>
-                                        </li>
-
-                                        <li>
-                                            <div class="form-check ps-0 custome-form-check">
-                                                <input class="checkbox_animated check-it" id="br5" name="brands"
-                                                    value="5" type="checkbox">
-                                                <label class="form-check-label">Sint Iste</label>
-                                                <p class="font-light">(0)</p>
-                                            </div>
-                                        </li>
-
-                                        <li>
-                                            <div class="form-check ps-0 custome-form-check">
-                                                <input class="checkbox_animated check-it" id="br6" name="brands"
-                                                    value="6" type="checkbox">
-                                                <label class="form-check-label">Et Eos</label>
-                                                <p class="font-light">(6)</p>
-                                            </div>
-                                        </li>
-
-                                        <li>
-                                            <div class="form-check ps-0 custome-form-check">
-                                                <input class="checkbox_animated check-it" id="br7" name="brands"
-                                                    value="7" type="checkbox">
-                                                <label class="form-check-label">Vel Explicabo</label>
-                                                <p class="font-light">(2)</p>
-                                            </div>
-                                        </li>
-
-                                        <li>
-                                            <div class="form-check ps-0 custome-form-check">
-                                                <input class="checkbox_animated check-it" id="br8" name="brands"
-                                                    value="8" type="checkbox">
-                                                <label class="form-check-label">Ipsam Earum</label>
-                                                <p class="font-light">(4)</p>
-                                            </div>
-                                        </li>
-
-                                        <li>
-                                            <div class="form-check ps-0 custome-form-check">
-                                                <input class="checkbox_animated check-it" id="br9" name="brands"
-                                                    value="9" type="checkbox">
-                                                <label class="form-check-label">Sequi Reprehenderit</label>
-                                                <p class="font-light">(5)</p>
-                                            </div>
-                                        </li>
-
-                                        <li>
-                                            <div class="form-check ps-0 custome-form-check">
-                                                <input class="checkbox_animated check-it" id="br10" name="brands"
-                                                    value="10" type="checkbox">
-                                                <label class="form-check-label">Sunt Corrupti</label>
-                                                <p class="font-light">(3)</p>
-                                            </div>
-                                        </li>
+                                        @endforeach                                        
                                     </ul>
                                 </div>
                             </div>
@@ -550,6 +479,7 @@
     <input type="hidden" name="page" id="page" value="{{$page}}">
     <input type="hidden" name="size" id="size" value="{{$size}}">
     <input type="hidden" name="order" id="order" value="{{$order}}">
+    <input type="hidden" name="brands" id="brands" value="{{$q_brands}}">
 </form>
 @endsection
 
@@ -564,5 +494,18 @@
             $("#order").val($("#orderby option:selected").val());
             $("#frmFilter").submit();
         });
+
+        function filterProductByBrands(brand){
+            var brands = "";
+            $("input[name='brands']:checked").each(function(){
+                if (brands == "") {
+                    brands += this.value;
+                } else {
+                    brands += "," + this.value;
+                }
+            });
+            $("#brands").val(brands);
+            $("#frmFilter").submit();
+        }
     </script>
 @endpush
