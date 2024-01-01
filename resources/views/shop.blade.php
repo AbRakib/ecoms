@@ -445,20 +445,35 @@
     <input type="hidden" name="order" id="order" value="{{$order}}">
     <input type="hidden" name="brands" id="brands" value="{{$q_brands}}">
     <input type="hidden" name="categories" id="categories" value="{{$q_categories}}">
+    <input type="hidden" name="prange" id="prange" value="">
 </form>
 @endsection
 
 @push('scripts')
     <script>
-        $("#pagesize").on("change", function(){
-            $("#size").val($("#pagesize option:selected").val());
-            $("#frmFilter").submit();
-        });
+        $(function(){
+            $("#pagesize").on("change", function(){
+                $("#size").val($("#pagesize option:selected").val());
+                $("#frmFilter").submit();
+            });
 
-        $("#orderby").on("change", function(){
-            $("#order").val($("#orderby option:selected").val());
-            $("#frmFilter").submit();
+            $("#orderby").on("change", function(){
+                $("#order").val($("#orderby option:selected").val());
+                $("#frmFilter").submit();
+            });
+            var $range = $("js-range-slider");
+            // instance = $range.data("ionRangesSlider");
+            // instance.update({
+            //     from:{{$from}},
+            //     to:{{$to}}
+            // });
+            $("#prange").on("change", function () {
+                setTimeout(() => {
+                    $("#frmFilter").submit();
+                }, 1000);
+            });
         });
+        
 
         function filterProductByBrands(brand){
             var brands = "";
