@@ -3,9 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Models\Brand;
-use App\Models\Category;
 use App\Models\Product;
+use App\Models\Category;
 use Illuminate\Http\Request;
+use Gloudemans\Shoppingcart\Facades\Cart;
 
 class ShopController extends Controller {
 
@@ -69,5 +70,17 @@ class ShopController extends Controller {
         $product = Product::where('slug', $slug)->first();
         $products = Product::where('slug', '!=', $slug)->inRandomOrder('id')->get()->take('8');
         return view('details', compact('product', 'products'));
+    }
+
+    public function getCartAndWishlistCount() {
+        $cartCount = Cart::instance("cart")->content()->count();
+        $wishlistCount = Cart::instance("wishlist")->content()->count();
+
+        return response()->json([
+            'status' => 200, 
+            'cartCount' => $cartCount, 
+            'wishlistCount' => $wishlistCount
+        ]);
+        
     }
 }
