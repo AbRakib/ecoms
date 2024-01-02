@@ -18,4 +18,17 @@ class WishlistController extends Controller {
         Cart::instance("wishlist")->add($request->id, $request->name, 1, $request->price)->associate('App\Models\Product');
         return response()->json(['status' => 200, 'message' => 'Success ! item successfully add your wishlist']);
     }
+
+    // remove product from wishlist
+    public function removeProductFromWishlist(Request $request) {
+        $rowId = $request->rowId;
+        Cart::instance("wishlist")->remove($rowId);
+        return redirect()->route("wishlist.list");
+    }
+
+    // clear wishlist
+    public function clearWishlist() {
+        Cart::instance("wishlist")->destroy();
+        return redirect()->route("wishlist.list");
+    }
 }

@@ -100,7 +100,7 @@
                                 <a href="javascript:void(0)" class="icon">
                                     <i class="fas fa-shopping-cart"></i>
                                 </a>
-                                <a href="javascript:void(0)" class="icon">
+                                <a href="javascript:void(0)" class="icon" onclick="removeFromWishlist('{{$item->rowId}}')">
                                     <i class="fas fa-times"></i>
                                 </a>
                             </td>
@@ -108,6 +108,11 @@
                         @endforeach
                     </tbody>
                 </table>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12 text-end">
+                <a href="javascript:void(0)" onclick="clearWishlist()">Clear All Items</a>
             </div>
         </div>
         @else 
@@ -121,5 +126,29 @@
         @endif
     </div>
 </section>
-<!-- Cart Section End -->   
+<!-- Cart Section End -->
+
+<form id="deleteFromWishlist" action="{{route("wishlist.remove")}}" method="POST">
+    @csrf
+    @method("DELETE")
+    <input type="hidden" id="rowId" name="rowId" />
+</form>
+
+<form id="clearWishlist" action="{{route("wishlist.clear")}}" method="POST">
+    @csrf
+    @method("DELETE")
+</form>
+
 @endsection
+
+@push('scripts')
+    <script>
+        function removeFromWishlist(rowId) {
+            $("#rowId").val(rowId);
+            $("#deleteFromWishlist").submit();
+        }
+        function clearWishlist() {
+            $("#clearWishlist").submit();
+        }
+    </script>
+@endpush
