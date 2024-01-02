@@ -31,4 +31,14 @@ class WishlistController extends Controller {
         Cart::instance("wishlist")->destroy();
         return redirect()->route("wishlist.list");
     }
+
+    // move to cart
+    public function moveToCart(Request $request) {
+        $rowId = $request->id;
+        $item = Cart::instance('wishlist')->get($rowId);
+        Cart::instance('wishlist')->remove($rowId);
+        Cart::instance('cart')->add($item->model->id, $item->model->name, 1, $item->model->regular_price)->associate('App\Models\Product');
+
+        return redirect()->route('wishlist.list');
+    }
 }
